@@ -1,0 +1,9 @@
+# The main gmsj-cli command
+
+myDir=`dirname $0`
+projectDir=`dirname $myDir`
+targetDir="$projectDir/target"
+export CLASSPATH="$targetDir/classes"
+CLASSPATH="$CLASSPATH:$targetDir/dist/lib/*"
+
+java net.apjanke.gmsjcli.MainApp "$@"
