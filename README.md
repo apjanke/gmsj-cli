@@ -49,13 +49,13 @@ The idea is that `gmsj-cli` will have several subcommands which exercise the var
 
 (This is a prerequisite for all the other usages.)
 
-First, go to your `google-maps-services-java` working copy, and do this to build and install it.
+First, go to your `google-maps-services-java` working copy, and do this to build and install it to your local Maven repository:
 
 ```
 ./gradlew install
 ```
 
-Then, go to your `gmsj-cli` working copy, and do this.
+Then, go to your `gmsj-cli` working copy, and do this:
 
 ```
 mvn clean
@@ -67,6 +67,10 @@ Then you can run the `./bin/gmsj-cli` command from that working copy.
 Each time you change the `google-maps-services-java` library, you must re-do all of these steps, in order!
 
 ####  Geocode a human-supplied location
+
+Do the build instructions first!
+
+Then you can do the following to actually use it:
 
 ```
 ./bin/gmsj-cli geocode "200 5th Ave, New York, NY"
