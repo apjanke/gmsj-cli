@@ -113,7 +113,13 @@ public class GeocodeCmd extends Subcommand {
             out.println("Address:");
             for (int iAddr = 1; iAddr < rslt.addressComponents.length; iAddr++) {
                 AddressComponent ac  = rslt.addressComponents[iAddr];
-                out.format("  %s (\"%s\") [%s]\n", ac.shortName, ac.longName, slashJoin(ac.types));
+                String display = null;
+                if (ac.shortName.equals(ac.longName)) {
+                    display = ac.shortName;
+                } else {
+                    display = String.format("%s (\"%s\")", ac.shortName, ac.longName);
+                }
+                out.format("  %s [%s]\n", display, slashJoin(ac.types));
             }
         }
     }
