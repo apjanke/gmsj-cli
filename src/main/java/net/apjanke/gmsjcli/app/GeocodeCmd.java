@@ -54,7 +54,7 @@ public class GeocodeCmd extends Subcommand {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         for (int i = 0; i < results.length; i++) {
             System.out.println("Result " + i + ":");
-            System.out.println(gson.toJson(results[i].addressComponents));
+            System.out.println(gson.toJson(results[i]));
         }
 
         // Okay, things went as expected
