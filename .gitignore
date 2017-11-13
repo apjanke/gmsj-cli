@@ -2,6 +2,7 @@
 /out/
 /bin/
 /com/
+/target/
 .gradle/
 .nb-gradle/
 .nb-gradle-properties

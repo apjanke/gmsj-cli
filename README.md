@@ -1,19 +1,24 @@
 # gmsj-cli
 
-This is a minimal CLI front-end for the [`google-maps-services-java`](https://github.com/googlemaps/google-maps-services-java) library. I wrote it to use for developing and debugging google-maps-services-java itself. It's not intended to be actually useful, or for use in any production scenario.
+This is a minimal CLI front-end for the [`google-maps-services-java`](https://github.com/googlemaps/google-maps-services-java) library. I wrote it to use while developing and debugging `google-maps-services-java` itself. It's not intended to be actually useful, or for use in any production scenario.
 
-THIS PROGRAM IS COMPLETELY UNSUPPORTED.
+**THIS PROGRAM IS COMPLETELY UNSUPPORTED.**
 
 ## Requirements
 
 * Unix
 * google-maps-services-java
 * Java 1.7
-* A Google Maps API key (maybe)
+* A Google Maps API key
+* Maven
+* Other Java libraries, as specified in `pom.xml`
+** This includes all Java libraries required by `google-maps-services-java`, and maybe some more required just by `gmsj-cli`.
 
 In particular, this program will not work on Windows. It's written for use on Unix-like systems, and macOS in particular.
 
-gmsj-cli is written to work without a Google Maps API key in the general case, as long as you're doing low-volume testing.
+You must set the environment variable GOOGLE_MAPS_API_KEY to contain your Google Maps API key before running gmsj-cli. That's how it picks up your credentials.
+
+This is not an end-user application, so no distinction is made between build-time and run-time requirements.
 
 ## Usage Scenarios
 
@@ -30,3 +35,27 @@ The version of gmsj-cli tracks the version of google-maps-services-java that it 
 ## Support and Contributing
 
 This is a one-off side project, and no particular level of support is guaranteed or even suggested. But if you find this project useful, I welcome bug reports and feature requests.
+
+## Interface
+
+The idea is that `gmsj-cli` will have several subcommands which exercise the various parts of `google-maps-services-java`. As of now, the only thing implemented is a trivial `geocode` subcommand, which exercises the Geocoding API.
+
+## Example Usage
+
+
+####  Build the application
+
+(This is a prerequisite for all the other usages.)
+
+```
+mvn clean
+mvn package
+```
+
+####  Geocode a human-supplied location
+
+```
+./bin/gmsj-cli geocode "200 5th Ave, New York, NY"
+```
+
+
