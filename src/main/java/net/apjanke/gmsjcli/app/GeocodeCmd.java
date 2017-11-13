@@ -5,40 +5,58 @@ import com.google.gson.GsonBuilder;
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
 import com.google.maps.errors.ApiException;
+import com.google.maps.model.AddressComponent;
 import com.google.maps.model.GeocodingResult;
+import com.google.maps.model.Geometry;
+import org.apache.commons.cli.*;
 
 import java.io.IOException;
+import java.io.PrintStream;
 
 public class GeocodeCmd extends Subcommand {
     @Override
     public int run(String[] args) {
         super.run(args);
 
-        // Parse inputs
-
-        // Haha, hack
-        if (args.length == 0) {
-            darnit("Geocoding argument is required.");
-        }
-        if (args.length > 1) {
-            darnit("Too many inputs.");
-        }
-        String geocodeInput = args[0];
-        System.out.println("Geocoding: " + geocodeInput);
-
         // General API stuff
         String apiKey = System.getenv("GOOGLE_MAPS_API_KEY");
         if (apiKey == null) {
-          System.err.println("No API key found.");
-          System.err.println("The GOOGLE_MAPS_API_KEY environment variable must be set.");
-          System.exit(1);
+            System.err.println("No API key found.");
+            System.err.println("The GOOGLE_MAPS_API_KEY environment variable must be set.");
+            System.exit(1);
         }
-                
-        // Run geocoding request
+
+        // Parse command line inputs - general
+        sanityCheckCmdLineArgs(args);
+        String geocodeInput = args[0];
+
+        // Parse command line inputs - subcommand-specific
+        GeocodeCmdOutputFormat outputFormat = GeocodeCmdOutputFormat.CONCISE;
+        Options options = new Options();
+        options.addOption("f", "format", true, "format for output");
+        CommandLineParser parser = new DefaultParser();
+        CommandLine cmdLine = null;
+        try {
+            cmdLine = parser.parse(options, args);
+        } catch (ParseException e) {
+            System.err.println("Error: Could not parse command line: " + e.getMessage());
+            System.exit(1);
+        }
+        if (cmdLine.hasOption("f")) {
+            String outputFormatArg = cmdLine.getOptionValue('f');
+            if ("concise".equals(outputFormatArg)) {
+                outputFormat = GeocodeCmdOutputFormat.CONCISE;
+            } else if ("gson".equals(outputFormatArg)) {
+                outputFormat = GeocodeCmdOutputFormat.GSON;
+            } else {
+                darnit("Invalid output format: " + outputFormatArg);
+            }
+        }
+
+        // Run geocoding API request
         GeoApiContext geoApiContext = new GeoApiContext.Builder()
                 .apiKey(apiKey)
                 .build();
-
         GeocodingResult[] results = null;
         try {
             results = GeocodingApi.geocode(geoApiContext,
@@ -50,14 +68,78 @@ public class GeocodeCmd extends Subcommand {
         }
 
         // Display output
-        System.out.println("Results length: " + results.length);
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        for (int i = 0; i < results.length; i++) {
-            System.out.println("Result " + i + ":");
-            System.out.println(gson.toJson(results[i]));
+        switch (outputFormat) {
+            case CONCISE:
+                displayOutputConcise(results);
+                break;
+            case GSON:
+                displayOutputGson(results);
+                break;
+            default:
+                darnit("Internal error: Invalid outputFormat: " + outputFormat);
         }
 
         // Okay, things went as expected
         return 0;
     }
+
+    private void displayOutputGson(GeocodingResult[] results) {
+        PrintStream out = System.out;
+        out.println("Results length: " + results.length);
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        for (int i = 0; i < results.length; i++) {
+            out.println("Result " + i + ":");
+            out.println(gson.toJson(results[i]));
+        }
+    }
+
+    private void displayOutputConcise(GeocodingResult[] results) {
+        PrintStream out = System.out;
+        out.println("Results length: " + results.length);
+        for (int i = 0; i < results.length; i++) {
+            GeocodingResult rslt = results[i];
+            out.println("Result " + i + ":");
+            out.println("Formatted Address: " + rslt.formattedAddress);
+            out.println("Types: " + slashJoin(rslt.types));
+            if (rslt.partialMatch) {
+                out.println("PARTIAL MATCH");
+            }
+            out.println("PlaceId: " + rslt.placeId);
+            Geometry geom = rslt.geometry;
+            out.format("Geom: (%.6f, %.6f) %s: [(%.3f,%.3f) / (%.3f,%.3f)]\n",
+                    geom.location.lat, geom.location.lng, geom.locationType,
+                    geom.viewport.northeast.lat, geom.viewport.northeast.lng,
+                    geom.viewport.southwest.lat, geom.viewport.southwest.lng);
+            out.println("Address:");
+            for (int iAddr = 1; iAddr < rslt.addressComponents.length; iAddr++) {
+                AddressComponent ac  = rslt.addressComponents[iAddr];
+                out.format("  %s (\"%s\") [%s]\n", ac.shortName, ac.longName, slashJoin(ac.types));
+            }
+        }
+    }
+
+   private static String slashJoin(Object[] things) {
+        if (things.length == 0) {
+            return "";
+        }
+        String str = things[0].toString();
+        for (int i = 1; i < things.length; i++) {
+            str = str + " / " + things[i].toString();
+        }
+        return str;
+   }
+
+    private void sanityCheckCmdLineArgs(String[] args) {
+        // Haha, hack
+        if (args.length == 0) {
+            darnit("Geocoding argument is required.");
+        }
+    }
+}
+
+enum GeocodeCmdOutputFormat {
+    /** A concise, human-readable output format. */
+    CONCISE,
+    /** A GSON-driven JSON dump of the raw Java objects. */
+    GSON
 }
