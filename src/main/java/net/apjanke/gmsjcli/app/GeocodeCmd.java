@@ -106,7 +106,7 @@ public class GeocodeCmd extends Subcommand {
             }
             out.println("PlaceId: " + rslt.placeId);
             Geometry geom = rslt.geometry;
-            out.format("Geom: (%.6f, %.6f) %s: [(%.3f,%.3f) / (%.3f,%.3f)]\n",
+            out.format("Geom: (%.6f, %.6f) %s: [(%.3f,%.3f), (%.3f,%.3f)]\n",
                     geom.location.lat, geom.location.lng, geom.locationType,
                     geom.viewport.northeast.lat, geom.viewport.northeast.lng,
                     geom.viewport.southwest.lat, geom.viewport.southwest.lng);
