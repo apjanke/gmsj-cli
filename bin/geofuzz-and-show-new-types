@@ -1,0 +1,13 @@
+#!/bin/bash
+
+thisDir=$(dirname $0)
+thisDir=$(realpath $thisDir)
+projectDir=$(dirname $thisDir)
+
+stdout_tmp=$(mktemp gmsj-geofuzz-out-XXXXX)
+stderr_tmp=$(mktemp gmsj-geofuzz-err-XXXXX)
+
+${thisDir}/gmsj-cli geofuzz "$@" 2>${stderr_tmp}
+
+echo "Possible new types:"
+cat ${stderr_tmp} | sort | uniq

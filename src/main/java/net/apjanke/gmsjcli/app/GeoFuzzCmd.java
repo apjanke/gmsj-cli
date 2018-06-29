@@ -155,7 +155,6 @@ public class GeoFuzzCmd extends GenericApiCmd {
         if (options.setSeed) {
             rnd.setSeed(options.randSeed);
         }
-        System.out.println("Next random int: " + rnd.nextInt());
         for (int iPoint = 0; iPoint < options.nPoints; iPoint++) {
             double fuzzLat = startPoint.lat + ((rnd.nextDouble() - 0.5) * options.radius);
             double fuzzLng = startPoint.lng + ((rnd.nextDouble() - 0.5) * options.radius);
