@@ -11,3 +11,6 @@ ${thisDir}/gmsj-cli geofuzz "$@" 2>${stderr_tmp}
 
 echo "Possible new types:"
 cat ${stderr_tmp} | sort | uniq | sed -e 's/\[main\] WARN com.google.maps.internal.SafeEnumAdapter - Unknown type for enum //'
+
+rm ${stdout_tmp}
+rm ${stderr_tmp}
