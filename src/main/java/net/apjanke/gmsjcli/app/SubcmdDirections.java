@@ -33,12 +33,14 @@ public class SubcmdDirections extends GenericApiSubcmd {
         TrafficModel trafficModel = null;
         Unit unit = null;
         boolean showAlternatives = false;
+        TransitRoutingPreference transitRoutingPreference = null;
         Options cmdLineOptions = new Options();
         cmdLineOptions.addOption("t", "travel-mode", true, "travel mode");
         cmdLineOptions.addOption("T", "transit-mode", true, "transit mode");
         cmdLineOptions.addOption("a", "alternatives", false, "display alternative routes");
         cmdLineOptions.addOption("M", "traffic-model", true, "traffic model");
         cmdLineOptions.addOption("u", "units", true, "measurement unit system to use for display");
+        cmdLineOptions.addOption("p", "routing-preference", true, "routing preference (walking vs transfers)");
         CommandLineParser parser = new DefaultParser();
         CommandLine cmdLine = null;
         try {
@@ -61,6 +63,9 @@ public class SubcmdDirections extends GenericApiSubcmd {
         }
         if (cmdLine.hasOption("u")) {
             unit = parseUnit(cmdLine.getOptionValue("u"));
+        }
+        if (cmdLine.hasOption("p")) {
+            transitRoutingPreference = parseTransitRoutingPreference(cmdLine.getOptionValue("p"));
         }
         List<String> leftovers = cmdLine.getArgList();
         if (leftovers.size() != 2) {
@@ -91,6 +96,9 @@ public class SubcmdDirections extends GenericApiSubcmd {
         }
         if (unit != null) {
             req.units(unit);
+        }
+        if (transitRoutingPreference != null) {
+            req.transitRoutingPreference(transitRoutingPreference);
         }
         DirectionsResult result = getDirectionsSafe(req);
 
@@ -157,6 +165,17 @@ public class SubcmdDirections extends GenericApiSubcmd {
                 return Unit.IMPERIAL;
             default:
                 throw new IllegalArgumentException("Invalid Unit argument: " + arg);
+        }
+    }
+
+    private static TransitRoutingPreference parseTransitRoutingPreference(String arg) {
+        switch (arg) {
+            case "less-walking":
+                return TransitRoutingPreference.LESS_WALKING;
+            case "fewer-transfers":
+                return TransitRoutingPreference.FEWER_TRANSFERS;
+            default:
+                throw new IllegalArgumentException("Invalid TransitRoutingPreference argument: " + arg);
         }
     }
 
