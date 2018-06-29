@@ -33,16 +33,12 @@ class GeocodeResultsDisplayer {
                 displayOutputTerse(results);
                 break;
             case SILENT:
-                displayOutputSilent(results);
+                // NOP
                 break;
             default:
                 System.err.println("Internal error: Invalid outputFormat: " + format);
                 System.exit(1);
         }
-    }
-
-    private void displayOutputSilent(GeocodingResult[] results) {
-        // NOP
     }
 
     private void displayOutputTerse(GeocodingResult[] results) {
@@ -93,7 +89,7 @@ class GeocodeResultsDisplayer {
             out.println("Address:");
             for (int iAddr = 1; iAddr < rslt.addressComponents.length; iAddr++) {
                 AddressComponent ac  = rslt.addressComponents[iAddr];
-                String display = null;
+                String display;
                 if (ac.shortName.equals(ac.longName)) {
                     display = ac.shortName;
                 } else {
@@ -108,11 +104,11 @@ class GeocodeResultsDisplayer {
         if (things.length == 0) {
             return "";
         }
-        String str = things[0].toString();
+        StringBuilder sb = new StringBuilder(things[0].toString());
         for (int i = 1; i < things.length; i++) {
-            str = str + " / " + things[i].toString();
+            sb.append(" / ").append(things[i].toString());
         }
-        return str;
+        return sb.toString();
     }
 
 }

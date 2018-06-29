@@ -1,8 +1,8 @@
 #!/bin/bash
 
 thisDir=$(dirname $0)
-thisDir=$(realpath $thisDir)
-projectDir=$(dirname $thisDir)
+thisDir=$(realpath ${thisDir})
+projectDir=$(dirname ${thisDir})
 
 stdout_tmp=$(mktemp gmsj-geofuzz-out-XXXXX)
 stderr_tmp=$(mktemp gmsj-geofuzz-err-XXXXX)

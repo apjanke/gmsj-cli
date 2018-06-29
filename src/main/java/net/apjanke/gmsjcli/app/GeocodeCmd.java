@@ -1,7 +1,6 @@
 package net.apjanke.gmsjcli.app;
 
 import com.google.maps.GeoApiContext;
-import com.google.maps.GeocodingApi;
 import com.google.maps.model.GeocodingResult;
 import org.apache.commons.cli.*;
 
@@ -11,10 +10,6 @@ public class GeocodeCmd extends GenericApiCmd {
         super.run(args);
         getReady();
         
-        // Parse command line inputs - general
-        sanityCheckCmdLineArgs(args);
-        String geocodeInput = args[0];
-
         // Parse command line inputs - subcommand-specific
         GeocodeOutputFormat outputFormat = GeocodeOutputFormat.REGULAR;
         Options options = new Options();
@@ -30,12 +25,16 @@ public class GeocodeCmd extends GenericApiCmd {
         if (cmdLine.hasOption("f")) {
             outputFormat = parseFormatCmdLineOption(cmdLine, "f");
         }
+        if (cmdLine.getArgList().size() == 0) {
+            darnit("Must supply a geocoding address input.");
+        }
+        String geocodeInput = cmdLine.getArgList().get(0);
 
         // Run geocoding API request
         GeoApiContext geoApiContext = new GeoApiContext.Builder()
                 .apiKey(apiKey)
                 .build();
-        GeocodingResult[] results = null;
+        GeocodingResult[] results = geocodeSafe(geoApiContext, geocodeInput);
 
         // Display output
         GeocodeResultsDisplayer displayer = new GeocodeResultsDisplayer();
@@ -45,10 +44,4 @@ public class GeocodeCmd extends GenericApiCmd {
         return 0;
     }
 
-    private void sanityCheckCmdLineArgs(String[] args) {
-        // Haha, hack
-        if (args.length == 0) {
-            darnit("Geocoding argument is required.");
-        }
-    }
 }

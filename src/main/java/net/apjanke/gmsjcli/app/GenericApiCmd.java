@@ -45,7 +45,7 @@ class GenericApiCmd extends Subcommand {
      * Does a geocoding, panicking and exiting the program if there is an exception.
      * @param geoApiContext GeoApiContext to code against
      * @param geocodeInput String input to geocode
-     * @return
+     * @return Results of geocoding the given input
      */
     GeocodingResult[] geocodeSafe(GeoApiContext geoApiContext, String geocodeInput) {
       try {

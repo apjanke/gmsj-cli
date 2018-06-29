@@ -173,10 +173,4 @@ public class GeoFuzzCmd extends GenericApiCmd {
         boolean setSeed = true;
     }
 
-    private void sanityCheckCmdLineArgs(String[] args) {
-        if (args.length == 0) {
-            darnit("Geocoding argument is required.");
-        }
-    }
-  
 }

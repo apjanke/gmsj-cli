@@ -6,7 +6,7 @@ import net.apjanke.gmsjcli.app.Subcommand;
 
 import java.util.Arrays;
 
-public class MainApp {
+class MainApp {
     public static void main(String[] args) {
         if (args.length == 0) {
             System.err.println("Error: Arguments are required.");
