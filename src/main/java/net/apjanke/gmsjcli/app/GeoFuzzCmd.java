@@ -9,7 +9,6 @@ import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
 import com.google.maps.errors.ApiException;
 import com.google.maps.model.GeocodingResult;
-import static net.apjanke.gmsjcli.app.Subcommand.darnit;
 
 import com.google.maps.model.LatLng;
 import org.apache.commons.cli.CommandLine;
@@ -84,8 +83,12 @@ public class GeoFuzzCmd extends GenericApiCmd {
             String outputFormatArg = cmdLine.getOptionValue('f');
             if ("concise".equals(outputFormatArg)) {
                 outputFormat = GeocodeOutputFormat.CONCISE;
+            } else if ("regular".equals(outputFormatArg)) {
+                outputFormat = GeocodeOutputFormat.REGULAR;
             } else if ("gson".equals(outputFormatArg)) {
                 outputFormat = GeocodeOutputFormat.GSON;
+            } else if ("terse".equals(outputFormatArg)) {
+                outputFormat = GeocodeOutputFormat.TERSE;
             } else {
                 darnit("Invalid output format: " + outputFormatArg);
             }

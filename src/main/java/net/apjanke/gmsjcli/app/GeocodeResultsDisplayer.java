@@ -20,11 +20,17 @@ public class GeocodeResultsDisplayer {
      */
     void displayOutput(GeocodeOutputFormat format, GeocodingResult[] results) {
         switch (format) {
+            case REGULAR:
+                displayOutputRegular(results);
+                break;
             case CONCISE:
                 displayOutputConcise(results);
                 break;
             case GSON:
                 displayOutputGson(results);
+                break;
+            case TERSE:
+                displayOutputTerse(results);
                 break;
             case SILENT:
                 // NOP
@@ -32,6 +38,24 @@ public class GeocodeResultsDisplayer {
             default:
                 System.err.println("Internal error: Invalid outputFormat: " + format);
                 System.exit(1);
+        }
+    }
+
+    private void displayOutputTerse(GeocodingResult[] results) {
+        PrintStream out = System.out;
+        out.println("Results length: " + results.length);
+        if (results.length > 0) {
+            GeocodingResult result = results[0];
+            out.format("[%d]: %s (geometry.location=%s)\n", 0, result.formattedAddress, result.geometry.location);
+        }
+    }
+
+    private void displayOutputConcise(GeocodingResult[] results) {
+        PrintStream out = System.out;
+        out.println("Results length: " + results.length);
+        for (int i = 0; i < results.length; i++) {
+            GeocodingResult result = results[i];
+            out.format("[%d]: %s\n", i, result.formattedAddress);
         }
     }
 
@@ -45,7 +69,7 @@ public class GeocodeResultsDisplayer {
         }
     }
 
-    private void displayOutputConcise(GeocodingResult[] results) {
+    private void displayOutputRegular(GeocodingResult[] results) {
         PrintStream out = System.out;
         out.println("Results length: " + results.length);
         for (int i = 0; i < results.length; i++) {

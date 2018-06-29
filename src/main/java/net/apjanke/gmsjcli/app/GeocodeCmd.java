@@ -1,17 +1,9 @@
 package net.apjanke.gmsjcli.app;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
-import com.google.maps.errors.ApiException;
-import com.google.maps.model.AddressComponent;
 import com.google.maps.model.GeocodingResult;
-import com.google.maps.model.Geometry;
 import org.apache.commons.cli.*;
-
-import java.io.IOException;
-import java.io.PrintStream;
 
 public class GeocodeCmd extends GenericApiCmd {
     @Override
@@ -24,7 +16,7 @@ public class GeocodeCmd extends GenericApiCmd {
         String geocodeInput = args[0];
 
         // Parse command line inputs - subcommand-specific
-        GeocodeOutputFormat outputFormat = GeocodeOutputFormat.CONCISE;
+        GeocodeOutputFormat outputFormat = GeocodeOutputFormat.REGULAR;
         Options options = new Options();
         options.addOption("f", "format", true, "format for output");
         CommandLineParser parser = new DefaultParser();
@@ -38,7 +30,7 @@ public class GeocodeCmd extends GenericApiCmd {
         if (cmdLine.hasOption("f")) {
             String outputFormatArg = cmdLine.getOptionValue('f');
             if ("concise".equals(outputFormatArg)) {
-                outputFormat = GeocodeOutputFormat.CONCISE;
+                outputFormat = GeocodeOutputFormat.REGULAR;
             } else if ("gson".equals(outputFormatArg)) {
                 outputFormat = GeocodeOutputFormat.GSON;
             } else {
