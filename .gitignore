@@ -3,10 +3,17 @@
 /com/
 /target/
 .gradle/
+
+# NetBeans
 .nb-gradle/
 .nb-gradle-properties
+nb-configuration.xml
+
+# IntelliJ IDEA
 *.iml
 .idea/
+
+# Miscellandous
 .settings/
 .project
 .classpath
