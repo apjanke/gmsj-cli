@@ -33,6 +33,8 @@ public class GeocodeCmd extends GenericApiCmd {
                 outputFormat = GeocodeOutputFormat.REGULAR;
             } else if ("gson".equals(outputFormatArg)) {
                 outputFormat = GeocodeOutputFormat.GSON;
+            } else if ("terse".equals(outputFormatArg)) {
+                outputFormat = GeocodeOutputFormat.TERSE;
             } else {
                 darnit("Invalid output format: " + outputFormatArg);
             }

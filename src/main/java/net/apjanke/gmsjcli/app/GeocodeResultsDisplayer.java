@@ -8,7 +8,7 @@ import com.google.maps.model.Geometry;
 
 import java.io.PrintStream;
 
-public class GeocodeResultsDisplayer {
+class GeocodeResultsDisplayer {
 
     /**
      * Displays geocoding results on System.out in the specified format.

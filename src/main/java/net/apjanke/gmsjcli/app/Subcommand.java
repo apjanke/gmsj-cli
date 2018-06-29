@@ -5,7 +5,7 @@ public class Subcommand {
         return 0;
     }
 
-    public static void darnit(String message) {
+    static void darnit(String message) {
         System.err.println("Error: " + message);
         System.exit(1);
     }

@@ -96,16 +96,14 @@ public class GeoFuzzCmd extends GenericApiCmd {
         if (cmdLine.hasOption("r")) {
             String radiusArg = cmdLine.getOptionValue('r');
             try {
-                Double radius = Double.parseDouble(radiusArg);
-                fuzzOptions.radius = radius;
+                fuzzOptions.radius = Double.parseDouble(radiusArg);
             } catch (NumberFormatException nfe) {
                 darnit("Invalid radius value: " + radiusArg);
             }
         }
         if (cmdLine.hasOption("n")) {
             String nPointsArg = cmdLine.getOptionValue("n");
-            int nPoints = Integer.parseInt(nPointsArg);
-            fuzzOptions.nPoints = nPoints;
+            fuzzOptions.nPoints = Integer.parseInt(nPointsArg);
         }
         if (cmdLine.hasOption("S")) {
             String randSeedArg = cmdLine.getOptionValue("S");
