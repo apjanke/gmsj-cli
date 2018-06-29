@@ -28,16 +28,7 @@ public class GeocodeCmd extends GenericApiCmd {
             System.exit(1);
         }
         if (cmdLine.hasOption("f")) {
-            String outputFormatArg = cmdLine.getOptionValue('f');
-            if ("concise".equals(outputFormatArg)) {
-                outputFormat = GeocodeOutputFormat.REGULAR;
-            } else if ("gson".equals(outputFormatArg)) {
-                outputFormat = GeocodeOutputFormat.GSON;
-            } else if ("terse".equals(outputFormatArg)) {
-                outputFormat = GeocodeOutputFormat.TERSE;
-            } else {
-                darnit("Invalid output format: " + outputFormatArg);
-            }
+            outputFormat = parseFormatCmdLineOption(cmdLine, "f");
         }
 
         // Run geocoding API request
@@ -45,14 +36,6 @@ public class GeocodeCmd extends GenericApiCmd {
                 .apiKey(apiKey)
                 .build();
         GeocodingResult[] results = null;
-        try {
-            results = GeocodingApi.geocode(geoApiContext,
-                    geocodeInput).await();
-        } catch (Exception e) {
-            System.err.format("%s during geocoding.", e.getClass().getName());
-            e.printStackTrace(System.err);
-            System.exit(1);
-        }
 
         // Display output
         GeocodeResultsDisplayer displayer = new GeocodeResultsDisplayer();

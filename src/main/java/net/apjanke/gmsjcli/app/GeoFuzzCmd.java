@@ -18,6 +18,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -58,10 +59,6 @@ public class GeoFuzzCmd extends GenericApiCmd {
         super.run(args);
         getReady();
         
-        // Parse command line inputs - general
-        sanityCheckCmdLineArgs(args);
-        String geocodeInput = args[0];
-
         // Parse command line inputs - subcommand-specific
         // Note: Ugh, this is horrible -apj
         GeoFuzzOptions fuzzOptions = new GeoFuzzOptions();
@@ -80,18 +77,7 @@ public class GeoFuzzCmd extends GenericApiCmd {
             darnit("Error: Could not parse command line: " + e.getMessage());
         }
         if (cmdLine.hasOption("f")) {
-            String outputFormatArg = cmdLine.getOptionValue('f');
-            if ("concise".equals(outputFormatArg)) {
-                outputFormat = GeocodeOutputFormat.CONCISE;
-            } else if ("regular".equals(outputFormatArg)) {
-                outputFormat = GeocodeOutputFormat.REGULAR;
-            } else if ("gson".equals(outputFormatArg)) {
-                outputFormat = GeocodeOutputFormat.GSON;
-            } else if ("terse".equals(outputFormatArg)) {
-                outputFormat = GeocodeOutputFormat.TERSE;
-            } else {
-                darnit("Invalid output format: " + outputFormatArg);
-            }
+            outputFormat = parseFormatCmdLineOption(cmdLine, "f");
         }
         if (cmdLine.hasOption("r")) {
             String radiusArg = cmdLine.getOptionValue('r');
@@ -114,6 +100,13 @@ public class GeoFuzzCmd extends GenericApiCmd {
         if (cmdLine.hasOption("y")) {
             fuzzOptions.setSeed = false;
         }
+        List<String> leftoverArgs = cmdLine.getArgList();
+        if (leftoverArgs.size() == 0) {
+            darnit("Geocoding address argument is required.");
+        } else if (leftoverArgs.size() > 1) {
+            darnit("Too many arguments: only a single geocoding address argument is allowed.");
+        }
+        String geocodeInput = leftoverArgs.get(0);
 
         geoFuzz(fuzzOptions, geocodeInput, outputFormat);
         
@@ -133,18 +126,10 @@ public class GeoFuzzCmd extends GenericApiCmd {
         GeoApiContext geoApiContext = new GeoApiContext.Builder()
                 .apiKey(apiKey)
                 .build();
-        GeocodingResult[] results = null;
-        try {
-            results = GeocodingApi.geocode(geoApiContext,
-                    geocodeInput).await();
-        } catch (Exception e) {
-            System.err.format("%s during geocoding.", e.getClass().getName());
-            e.printStackTrace(System.err);
-            System.exit(1);
-        }
+        GeocodingResult[] results = geocodeSafe(geoApiContext, geocodeInput);
 
         if (results.length < 1) {
-            System.err.format("No geocoding results found for '%s'", geocodeInput);
+            System.err.format("No geocoding results found for '%s'\n", geocodeInput);
             System.exit(1);
         }
 
@@ -189,7 +174,6 @@ public class GeoFuzzCmd extends GenericApiCmd {
     }
 
     private void sanityCheckCmdLineArgs(String[] args) {
-        // Haha, hack
         if (args.length == 0) {
             darnit("Geocoding argument is required.");
         }
