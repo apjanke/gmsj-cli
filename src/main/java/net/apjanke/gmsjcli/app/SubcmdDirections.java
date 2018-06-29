@@ -31,12 +31,14 @@ public class SubcmdDirections extends GenericApiSubcmd {
         TravelMode travelMode = null;
         TransitMode transitMode = null;
         TrafficModel trafficModel = null;
+        Unit unit = null;
         boolean showAlternatives = false;
         Options cmdLineOptions = new Options();
         cmdLineOptions.addOption("t", "travel-mode", true, "travel mode");
         cmdLineOptions.addOption("T", "transit-mode", true, "transit mode");
         cmdLineOptions.addOption("a", "alternatives", false, "display alternative routes");
         cmdLineOptions.addOption("M", "traffic-model", true, "traffic model");
+        cmdLineOptions.addOption("u", "units", true, "measurement unit system to use for display");
         CommandLineParser parser = new DefaultParser();
         CommandLine cmdLine = null;
         try {
@@ -56,6 +58,9 @@ public class SubcmdDirections extends GenericApiSubcmd {
         }
         if (cmdLine.hasOption("M")) {
             trafficModel = parseTrafficModelArg(cmdLine.getOptionValue("M"));
+        }
+        if (cmdLine.hasOption("u")) {
+            unit = parseUnit(cmdLine.getOptionValue("u"));
         }
         List<String> leftovers = cmdLine.getArgList();
         if (leftovers.size() != 2) {
@@ -83,6 +88,9 @@ public class SubcmdDirections extends GenericApiSubcmd {
         }
         if (trafficModel != null) {
             req.trafficModel(trafficModel);
+        }
+        if (unit != null) {
+            req.units(unit);
         }
         DirectionsResult result = getDirectionsSafe(req);
 
@@ -138,6 +146,17 @@ public class SubcmdDirections extends GenericApiSubcmd {
                 return TrafficModel.PESSIMISTIC;
             default:
                 throw new IllegalArgumentException("Invalid TrafficModel argument: " + arg);
+        }
+    }
+
+    private static Unit parseUnit(String arg) {
+        switch (arg) {
+            case "metric":
+                return Unit.METRIC;
+            case "imperial":
+                return Unit.IMPERIAL;
+            default:
+                throw new IllegalArgumentException("Invalid Unit argument: " + arg);
         }
     }
 
