@@ -14,7 +14,7 @@ import org.apache.commons.cli.*;
  *     Arguments:
  *       * -f, --format &lt;format>
  *         Valid arguments:
- *           concise, gson, terse, silent
+ *           regular, concise, gson, terse, silent; default = regular
  *       * <address>
  *           Any valid Google Maps search string
  * </pre>

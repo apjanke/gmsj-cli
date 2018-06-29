@@ -31,7 +31,7 @@ import java.util.Random;
  *     Arguments:
  *       * -f, --format &lt;format>
  *         Valid arguments:
- *           concise, gson, terse, silent
+ *           regular, concise, gson, terse, silent; default = silent
  *       * -r, --radius &lt;radius>
  *         Search radius size in degrees lat/long
  *       * -n, --npoints &lt;npoints>
