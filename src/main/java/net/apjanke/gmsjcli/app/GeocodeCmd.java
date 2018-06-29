@@ -61,75 +61,12 @@ public class GeocodeCmd extends GenericApiCmd {
         }
 
         // Display output
-        switch (outputFormat) {
-            case CONCISE:
-                displayOutputConcise(results);
-                break;
-            case GSON:
-                displayOutputGson(results);
-                break;
-            case SILENT:
-                // NOP
-                break;
-            default:
-                darnit("Internal error: Invalid outputFormat: " + outputFormat);
-        }
+        GeocodeResultsDisplayer displayer = new GeocodeResultsDisplayer();
+        displayer.displayOutput(outputFormat, results);
 
         // Okay, things went as expected
         return 0;
     }
-
-    private void displayOutputGson(GeocodingResult[] results) {
-        PrintStream out = System.out;
-        out.println("Results length: " + results.length);
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        for (int i = 0; i < results.length; i++) {
-            out.println("Result " + i + ":");
-            out.println(gson.toJson(results[i]));
-        }
-    }
-
-    private void displayOutputConcise(GeocodingResult[] results) {
-        PrintStream out = System.out;
-        out.println("Results length: " + results.length);
-        for (int i = 0; i < results.length; i++) {
-            GeocodingResult rslt = results[i];
-            out.println("Result " + i + ":");
-            out.println("Formatted Address: " + rslt.formattedAddress);
-            out.println("Types: " + slashJoin(rslt.types));
-            if (rslt.partialMatch) {
-                out.println("PARTIAL MATCH");
-            }
-            out.println("PlaceId: " + rslt.placeId);
-            Geometry geom = rslt.geometry;
-            out.format("Geom: (%.6f, %.6f) %s: [(%.3f,%.3f), (%.3f,%.3f)]\n",
-                    geom.location.lat, geom.location.lng, geom.locationType,
-                    geom.viewport.northeast.lat, geom.viewport.northeast.lng,
-                    geom.viewport.southwest.lat, geom.viewport.southwest.lng);
-            out.println("Address:");
-            for (int iAddr = 1; iAddr < rslt.addressComponents.length; iAddr++) {
-                AddressComponent ac  = rslt.addressComponents[iAddr];
-                String display = null;
-                if (ac.shortName.equals(ac.longName)) {
-                    display = ac.shortName;
-                } else {
-                    display = String.format("%s (\"%s\")", ac.shortName, ac.longName);
-                }
-                out.format("  %s [%s]\n", display, slashJoin(ac.types));
-            }
-        }
-    }
-
-   private static String slashJoin(Object[] things) {
-        if (things.length == 0) {
-            return "";
-        }
-        String str = things[0].toString();
-        for (int i = 1; i < things.length; i++) {
-            str = str + " / " + things[i].toString();
-        }
-        return str;
-   }
 
     private void sanityCheckCmdLineArgs(String[] args) {
         // Haha, hack

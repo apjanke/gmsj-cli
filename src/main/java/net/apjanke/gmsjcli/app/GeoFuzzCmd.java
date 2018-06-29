@@ -54,8 +54,6 @@ import java.util.Random;
  */
 public class GeoFuzzCmd extends GenericApiCmd {
 
-    private static Random rnd = new Random();
-
     @Override
     public int run(String[] args) {
         super.run(args);
@@ -74,6 +72,7 @@ public class GeoFuzzCmd extends GenericApiCmd {
         cmdLineOptions.addOption("r", "radius", true, "radius size, in degrees lat/lng");
         cmdLineOptions.addOption("n", "npoints", true, "number of points to search through");
         cmdLineOptions.addOption("S", "rand-seed", true, "initial random seed value");
+        cmdLineOptions.addOption("y", "sys-rand-seed", false, "use system random seed");
         CommandLineParser parser = new DefaultParser();
         CommandLine cmdLine = null;
         try {
@@ -111,16 +110,8 @@ public class GeoFuzzCmd extends GenericApiCmd {
             fuzzOptions.setSeed = true;
             fuzzOptions.randSeed = randSeed;
         }
-
-        // We only support SILENT format right now, because actual geocoding results are
-        // irrelevant.
-        switch (outputFormat) {
-            case SILENT:
-                // NOP
-                break;
-            default:
-                darnit("Unsupported output format: '" + outputFormat + "'. Only SILENT is currently supported.");
-                break;
+        if (cmdLine.hasOption("y")) {
+            fuzzOptions.setSeed = false;
         }
 
         geoFuzz(fuzzOptions, geocodeInput, outputFormat);
@@ -160,15 +151,22 @@ public class GeoFuzzCmd extends GenericApiCmd {
         LatLng startPoint = startPointRslt.geometry.location;
 
         // Fuzz around that point
+        Random rnd = new Random();
+        if (options.setSeed) {
+            rnd.setSeed(options.randSeed);
+        }
+        System.out.println("Next random int: " + rnd.nextInt());
         for (int iPoint = 0; iPoint < options.nPoints; iPoint++) {
             double fuzzLat = startPoint.lat + ((rnd.nextDouble() - 0.5) * options.radius);
             double fuzzLng = startPoint.lng + ((rnd.nextDouble() - 0.5) * options.radius);
             LatLng fuzzPoint = new LatLng(fuzzLat, fuzzLng);
             //System.out.println("Geocoding point 1: " + fuzzPoint);
             GeocodingResult[] fuzzResults;
+            GeocodeResultsDisplayer displayer = new GeocodeResultsDisplayer();
             try {
                 fuzzResults = GeocodingApi.reverseGeocode(geoApiContext, fuzzPoint)
                         .await();
+                displayer.displayOutput(format, fuzzResults);
             } catch (ApiException e) {
                 darnit("ApiException during geocoding: " + e.getMessage());
             } catch (InterruptedException e) {
@@ -186,8 +184,8 @@ public class GeoFuzzCmd extends GenericApiCmd {
     private static class GeoFuzzOptions {
         int nPoints = 50;
         double radius = 0.1;
-        long randSeed = 0;
-        boolean setSeed = false;
+        long randSeed = 42;
+        boolean setSeed = true;
     }
 
     private void sanityCheckCmdLineArgs(String[] args) {
