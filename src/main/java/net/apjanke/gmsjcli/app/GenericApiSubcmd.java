@@ -9,7 +9,7 @@ import org.apache.commons.cli.CommandLine;
  * Generic class for a subcommand that has to use the Google Maps API, but not more specific than that.
  * @author janke
  */
-class GenericApiCmd extends Subcommand {
+class GenericApiSubcmd extends Subcommand {
   String apiKey;
   
   void getReady() {

@@ -51,7 +51,7 @@ import java.util.Random;
  * This command is wrapped by the 'bin/gmsj-cli geofuzz' subcommand in the main driver script.
  * Use that.
  */
-public class GeoFuzzCmd extends GenericApiCmd {
+public class SubcmdGeoFuzz extends GenericApiSubcmd {
 
     @Override
     public int run(String[] args) {

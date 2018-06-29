@@ -28,7 +28,7 @@ import org.apache.commons.cli.*;
  *     gmsj-cli geocode "424a 3rd Ave, Brooklyn, NY 11215"
  * </pre>
  */
-public class GeocodeCmd extends GenericApiCmd {
+public class SubcmdGeocode extends GenericApiSubcmd {
     @Override
     public int run(String[] args) {
         super.run(args);
