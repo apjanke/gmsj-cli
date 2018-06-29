@@ -4,6 +4,30 @@ import com.google.maps.GeoApiContext;
 import com.google.maps.model.GeocodingResult;
 import org.apache.commons.cli.*;
 
+/**
+ * Geocode a given address.
+ *
+ * Usage:
+ * <pre>
+ *     java net.apjanke.gmsjcli.app.MainApp geocode [-f|--format &lt;format>] &lt;address>
+ *
+ *     Arguments:
+ *       * -f, --format &lt;format>
+ *         Valid arguments:
+ *           concise, gson, terse, silent
+ *       * <address>
+ *           Any valid Google Maps search string
+ * </pre>
+ *
+ * The gmsj-cli command wraps this up for easy invocation.
+ *
+ * Examples:
+ * <pre>
+ *     gmsj-cli geocode "Bar Great Harry, Brooklyn, NY"
+ *     gmsj-cli geocode -f concise "Lahore, Pakistan"
+ *     gmsj-cli geocode "424a 3rd Ave, Brooklyn, NY 11215"
+ * </pre>
+ */
 public class GeocodeCmd extends GenericApiCmd {
     @Override
     public int run(String[] args) {

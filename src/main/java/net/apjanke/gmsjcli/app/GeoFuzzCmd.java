@@ -26,20 +26,19 @@ import java.util.Random;
  *
  * Usage:
  * <pre>
- *     java net.apjanke.gmsjcli.app.MainApp geofuzz [-f|--format &lt;format>] [-r &lt;radius>] <input>
+ *     java net.apjanke.gmsjcli.app.MainApp geofuzz [-f|--format &lt;format>] [-r &lt;radius>] <address>
  *
  *     Arguments:
  *       * -f, --format &lt;format>
  *         Valid arguments:
- *           concise
- *           gson
+ *           concise, gson, terse, silent
  *       * -r, --radius &lt;radius>
  *         Search radius size in degrees lat/long
  *       * -n, --npoints &lt;npoints>
  *         Number of points to generate during search
  *       * -S, --rand-seed &lt;seed-value>
  *         Initial value for random seed (for reproducible results)
- *       * <input>
+ *       * <address>
  *           Any valid Google Maps search string
  *
  * </pre>
