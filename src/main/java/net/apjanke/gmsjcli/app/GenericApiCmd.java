@@ -11,8 +11,8 @@ class GenericApiCmd extends Subcommand {
         // General API stuff
         apiKey = System.getenv("GOOGLE_MAPS_API_KEY");
         if (apiKey == null) {
-            System.err.println("No API key found.");
-            System.err.println("The GOOGLE_MAPS_API_KEY environment variable must be set.");
+            System.err.println("Error: No API key found.");
+            System.err.println("Error: The GOOGLE_MAPS_API_KEY environment variable must be set.");
             System.exit(1);
         }
   }
