@@ -33,12 +33,16 @@ public class GeocodeResultsDisplayer {
                 displayOutputTerse(results);
                 break;
             case SILENT:
-                // NOP
+                displayOutputSilent(results);
                 break;
             default:
                 System.err.println("Internal error: Invalid outputFormat: " + format);
                 System.exit(1);
         }
+    }
+
+    private void displayOutputSilent(GeocodingResult[] results) {
+        // NOP
     }
 
     private void displayOutputTerse(GeocodingResult[] results) {
