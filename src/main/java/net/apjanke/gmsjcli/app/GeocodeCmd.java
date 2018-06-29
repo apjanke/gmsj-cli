@@ -13,25 +13,18 @@ import org.apache.commons.cli.*;
 import java.io.IOException;
 import java.io.PrintStream;
 
-public class GeocodeCmd extends Subcommand {
+public class GeocodeCmd extends GenericApiCmd {
     @Override
     public int run(String[] args) {
         super.run(args);
-
-        // General API stuff
-        String apiKey = System.getenv("GOOGLE_MAPS_API_KEY");
-        if (apiKey == null) {
-            System.err.println("No API key found.");
-            System.err.println("The GOOGLE_MAPS_API_KEY environment variable must be set.");
-            System.exit(1);
-        }
-
+        getReady();
+        
         // Parse command line inputs - general
         sanityCheckCmdLineArgs(args);
         String geocodeInput = args[0];
 
         // Parse command line inputs - subcommand-specific
-        GeocodeCmdOutputFormat outputFormat = GeocodeCmdOutputFormat.CONCISE;
+        GeocodeOutputFormat outputFormat = GeocodeOutputFormat.CONCISE;
         Options options = new Options();
         options.addOption("f", "format", true, "format for output");
         CommandLineParser parser = new DefaultParser();
@@ -45,9 +38,9 @@ public class GeocodeCmd extends Subcommand {
         if (cmdLine.hasOption("f")) {
             String outputFormatArg = cmdLine.getOptionValue('f');
             if ("concise".equals(outputFormatArg)) {
-                outputFormat = GeocodeCmdOutputFormat.CONCISE;
+                outputFormat = GeocodeOutputFormat.CONCISE;
             } else if ("gson".equals(outputFormatArg)) {
-                outputFormat = GeocodeCmdOutputFormat.GSON;
+                outputFormat = GeocodeOutputFormat.GSON;
             } else {
                 darnit("Invalid output format: " + outputFormatArg);
             }
@@ -74,6 +67,9 @@ public class GeocodeCmd extends Subcommand {
                 break;
             case GSON:
                 displayOutputGson(results);
+                break;
+            case SILENT:
+                // NOP
                 break;
             default:
                 darnit("Internal error: Invalid outputFormat: " + outputFormat);
@@ -141,11 +137,4 @@ public class GeocodeCmd extends Subcommand {
             darnit("Geocoding argument is required.");
         }
     }
-}
-
-enum GeocodeCmdOutputFormat {
-    /** A concise, human-readable output format. */
-    CONCISE,
-    /** A GSON-driven JSON dump of the raw Java objects. */
-    GSON
 }

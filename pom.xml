@@ -17,8 +17,8 @@
 
         <dependency>
             <groupId>com.google.maps</groupId>
-            <artifactId>google-maps-services-java</artifactId>
-            <version>0.2.5-SNAPSHOT</version>
+            <artifactId>google-maps-services</artifactId>
+            <version>0.2.8</version>
         </dependency>
 
         <dependency>

@@ -1,9 +1,20 @@
 # The main gmsj-cli command
+#
+# Usage:
+#
+#   gmsj-cli geocode [-f <format>] <address>
+#   gmsj-cli geofuzz [-r <radius>] [-n <nlocations>] [-S <rand-seed>] [-f <format>] <address>
+#
+# This command only works in development mode, because it makes use of the local
+# compilation target directory.
+#
+# You must set GOOGLE_MAPS_API_KEY in the environment for this to work.
 
-myDir=`dirname $0`
-projectDir=`dirname $myDir`
-targetDir="$projectDir/target"
-export CLASSPATH="$targetDir/classes"
+thisDir=$(dirname $0)
+thisDir=$(realpath $thisDir)
+projectDir=$(dirname $thisDir)
+targetDir="${projectDir}/target"
+export CLASSPATH="${targetDir}/classes"
 CLASSPATH="$CLASSPATH:$targetDir/dist/lib/*"
 
-java net.apjanke.gmsjcli.MainApp "$@"
+java -cp "$CLASSPATH" net.apjanke.gmsjcli.MainApp "$@"

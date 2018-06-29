@@ -1,5 +1,6 @@
 package net.apjanke.gmsjcli;
 
+import net.apjanke.gmsjcli.app.GeoFuzzCmd;
 import net.apjanke.gmsjcli.app.GeocodeCmd;
 import net.apjanke.gmsjcli.app.Subcommand;
 
@@ -21,6 +22,8 @@ public class MainApp {
         Subcommand cmd = null;
         if ("geocode".equals(subcommand)) {
             cmd = new GeocodeCmd();
+        } else if ("geofuzz".equals(subcommand)) {
+            cmd = new GeoFuzzCmd();
         } else {
             System.err.println("Error: Unrecognized subcommand: " + subcommand);
             System.exit(1);
