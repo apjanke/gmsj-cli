@@ -43,10 +43,10 @@ public class GeocodeResultsDisplayer {
 
     private void displayOutputTerse(GeocodingResult[] results) {
         PrintStream out = System.out;
-        out.println("Results length: " + results.length);
         if (results.length > 0) {
             GeocodingResult result = results[0];
-            out.format("[%d]: %s (geometry.location=%s)\n", 0, result.formattedAddress, result.geometry.location);
+            out.format("Results %2d long: %s (%s)\n", results.length,
+                    result.formattedAddress, result.geometry.location);
         }
     }
 
