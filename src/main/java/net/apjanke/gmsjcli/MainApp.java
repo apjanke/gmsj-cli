@@ -2,6 +2,7 @@ package net.apjanke.gmsjcli;
 
 import net.apjanke.gmsjcli.app.SubcmdGeoFuzz;
 import net.apjanke.gmsjcli.app.SubcmdGeocode;
+import net.apjanke.gmsjcli.app.SubcmdDirections;
 import net.apjanke.gmsjcli.app.Subcommand;
 
 import java.util.Arrays;
@@ -27,6 +28,8 @@ class MainApp {
             cmd = new SubcmdGeocode();
         } else if ("geofuzz".equals(subcommand)) {
             cmd = new SubcmdGeoFuzz();
+        } else if ("directions".equals(subcommand)) {
+            cmd = new SubcmdDirections();
         } else {
             System.err.println("Error: Unrecognized subcommand: " + subcommand);
             System.err.println("Error: Valid subcommands are: " + Arrays.toString(validSubCmds));

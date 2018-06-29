@@ -36,12 +36,12 @@ public class SubcmdGeocode extends GenericApiSubcmd {
         
         // Parse command line inputs - subcommand-specific
         GeocodeOutputFormat outputFormat = GeocodeOutputFormat.REGULAR;
-        Options options = new Options();
-        options.addOption("f", "format", true, "format for output");
+        Options cmdLineOptions = new Options();
+        cmdLineOptions.addOption("f", "format", true, "format for output");
         CommandLineParser parser = new DefaultParser();
         CommandLine cmdLine = null;
         try {
-            cmdLine = parser.parse(options, args);
+            cmdLine = parser.parse(cmdLineOptions, args);
         } catch (ParseException e) {
             System.err.println("Error: Could not parse command line: " + e.getMessage());
             System.exit(1);
