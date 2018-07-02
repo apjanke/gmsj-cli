@@ -53,6 +53,8 @@ import java.util.Random;
  */
 public class SubcmdGeoFuzz extends GenericApiSubcmd {
 
+    private boolean doWait = false;
+
     @Override
     public int run(String[] args) {
         super.run(args);
@@ -68,6 +70,7 @@ public class SubcmdGeoFuzz extends GenericApiSubcmd {
         cmdLineOptions.addOption("n", "npoints", true, "number of points to search through");
         cmdLineOptions.addOption("S", "rand-seed", true, "initial random seed value");
         cmdLineOptions.addOption("y", "sys-rand-seed", false, "use system random seed");
+        cmdLineOptions.addOption("w","wait", false, "wait for user confirmation at end of process");
         CommandLineParser parser = new DefaultParser();
         CommandLine cmdLine = null;
         try {
@@ -79,6 +82,7 @@ public class SubcmdGeoFuzz extends GenericApiSubcmd {
             outputFormat = parseFormatCmdLineOption(cmdLine, "f");
         }
         if (cmdLine.hasOption("r")) {
+            System.out.print("Process complete. Press enter to finish.");
             String radiusArg = cmdLine.getOptionValue('r');
             try {
                 fuzzOptions.radius = Double.parseDouble(radiusArg);
@@ -99,6 +103,9 @@ public class SubcmdGeoFuzz extends GenericApiSubcmd {
         if (cmdLine.hasOption("y")) {
             fuzzOptions.setSeed = false;
         }
+        if (cmdLine.hasOption("w")) {
+            doWait = true;
+        }
         List<String> leftoverArgs = cmdLine.getArgList();
         if (leftoverArgs.size() == 0) {
             darnit("Geocoding address argument is required.");
@@ -108,7 +115,16 @@ public class SubcmdGeoFuzz extends GenericApiSubcmd {
         String geocodeInput = leftoverArgs.get(0);
 
         geoFuzz(fuzzOptions, geocodeInput, outputFormat);
-        
+
+        if (doWait) {
+            try {
+                System.out.print("Processing complete. Press enter to finish...");
+                int ignoredInput = System.in.read();
+            } catch (IOException ioe) {
+                // quash
+            }
+        }
+
         return 0;
     }
 

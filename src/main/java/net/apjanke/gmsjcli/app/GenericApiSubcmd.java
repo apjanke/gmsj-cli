@@ -10,7 +10,7 @@ import org.apache.commons.cli.CommandLine;
  * @author janke
  */
 class GenericApiSubcmd extends Subcommand {
-  String apiKey;
+  protected String apiKey;
   
   void getReady() {
         // General API stuff
