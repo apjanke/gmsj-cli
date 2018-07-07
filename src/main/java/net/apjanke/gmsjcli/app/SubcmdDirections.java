@@ -225,6 +225,7 @@ public class SubcmdDirections extends GenericApiSubcmd {
                         DirectionsStep step = leg.steps[iStep];
                         out.format("        Step %d: %s -> %s: %s (%s, %s)\n",
                                 iStep, step.startLocation, step.endLocation, step.htmlInstructions, step.distance, step.duration);
+                        out.format("                 %s\n", step.toString());
                     }
                 }
             }
