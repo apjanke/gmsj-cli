@@ -19,4 +19,4 @@ targetDir="${projectDir}/target"
 export CLASSPATH="${targetDir}/gmsj-cli-${VERSION}.jar"
 CLASSPATH="$CLASSPATH:$targetDir/dist/lib/*"
 
-java -cp "$CLASSPATH" net.apjanke.gmsjcli.MainApp "$@"
+java -cp "$CLASSPATH" net.apjanke.gmsjcli.GmsjCli "$@"
