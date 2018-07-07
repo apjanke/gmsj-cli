@@ -207,6 +207,9 @@ public class SubcmdDirections extends GenericApiSubcmd {
                 AddressType[] addressTypes = waypoints[i].types;
                 out.format("  AddressTypes: %s\n", Arrays.toString(addressTypes));
             }
+            if (routes.length == 0) {
+                out.println("No routes found.");
+            }
             for (int i = 0; i < routes.length; i++) {
                 DirectionsRoute route = routes[i];
                 out.format("Route %d: %s\n", i, route);
