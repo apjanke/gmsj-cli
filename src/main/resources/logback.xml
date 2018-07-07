@@ -9,9 +9,5 @@
   
   <logger name="com.google.maps" level="DEBUG" />
   <logger name="net.apjanke.gmsjcli" level="DEBUG" />
-  
 
-  <root level="debug">
-    <appender-ref ref="STDOUT" />
-  </root>
 </configuration>
