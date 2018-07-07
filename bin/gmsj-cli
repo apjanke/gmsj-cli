@@ -10,7 +10,7 @@
 #
 # You must set GOOGLE_MAPS_API_KEY in the environment for this to work.
 
-VERSION=0.2.9-SNAPSHOT
+VERSION=0.2.10-SNAPSHOT
 
 thisDir=$(dirname $0)
 thisDir=$(realpath $thisDir)
