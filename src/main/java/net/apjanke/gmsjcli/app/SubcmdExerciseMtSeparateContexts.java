@@ -6,6 +6,8 @@ import com.google.maps.errors.ApiException;
 import com.google.maps.model.GeocodingResult;
 import com.google.maps.model.LatLng;
 import org.apache.commons.cli.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Random;
@@ -29,10 +31,10 @@ import java.util.Random;
  *       * -p, --points-per-instance &lt;nPoints>
  *         Number of points to query in each GeoApiContext instance
  *         Default: 1000
- *       * -D, --delayBetweenLaunch
+ *       * -D, --delay-between-launch
  *         Delay between launching each worker thread, in milliseconds
  *         Default: 100
- *       * -b, --delayBetweenLaunch-between-queries
+ *       * -b, --delay-between-queries
  *         Delay between individual queries in the worker threads.
  *         Default: 15
  *       * -d, --dirty
@@ -42,6 +44,7 @@ import java.util.Random;
  * </pre>
  */
 public class SubcmdExerciseMtSeparateContexts extends GenericApiSubcmd {
+    private static final Logger log = LoggerFactory.getLogger(SubcmdExerciseMtSeparateContexts.class);
 
     private final Outputter out = new Outputter();
 
@@ -54,10 +57,12 @@ public class SubcmdExerciseMtSeparateContexts extends GenericApiSubcmd {
         Options cmdLineOptions = new Options();
         cmdLineOptions.addOption("n", "num-instances", true,
                 "number of instances to create in separate threads");
-        cmdLineOptions.addOption("D", "delayBetweenLaunch", true,
-                "delayBetweenLaunch between launching worker threads, in milliseconds");
         cmdLineOptions.addOption("p", "points-per-instance", true,
                 "queries per worker");
+        cmdLineOptions.addOption("D", "delay-between-launch", true,
+                "delay between launching worker threads, in milliseconds");
+        cmdLineOptions.addOption("b", "delay-between-queries", true,
+                "delay between queries in each instance");
         cmdLineOptions.addOption("d", "dirty", false,
                 "do \"dirty\" closes, without calling shutdown() on GeoApiContext");
         cmdLineOptions.addOption("W", "no-wait", false,
@@ -76,6 +81,10 @@ public class SubcmdExerciseMtSeparateContexts extends GenericApiSubcmd {
         if (cmdLine.hasOption("D")) {
             String delayArg = cmdLine.getOptionValue("D");
             options.delayBetweenLaunch = Integer.parseInt(delayArg);
+        }
+        if (cmdLine.hasOption("b")) {
+            String delayArg = cmdLine.getOptionValue("b");
+            options.delayBetweenQueries = Integer.parseInt(delayArg);
         }
         if (cmdLine.hasOption("p")) {
             String nQueriesArg = cmdLine.getOptionValue("p");
@@ -106,8 +115,8 @@ public class SubcmdExerciseMtSeparateContexts extends GenericApiSubcmd {
     }
 
     private void exerciseMtSeparateContexts(MyOptions options) {
-        for (int iWorker = 0; iWorker < options.nWorkers; iWorker++) {
-            Thread thread = new Thread(new Worker(options, iWorker));
+        for (int iWorker = 1; iWorker <= options.nWorkers; iWorker++) {
+            Thread thread = new Thread(new Worker(options, iWorker), "gmsj-cli MtSc Worker-"+iWorker);
             thread.start();
             if (options.delayBetweenLaunch > 0) {
                 try {
@@ -132,7 +141,8 @@ public class SubcmdExerciseMtSeparateContexts extends GenericApiSubcmd {
         @Override
         public void run() {
             // Create a GeoApiContext
-            out.print("[launch #" + instanceNumber +"]");
+            log.debug("Launching worker #{}", instanceNumber);
+            out.println("[launch #" + instanceNumber +"]");
             GeoApiContext geoApiContext = new GeoApiContext.Builder()
                     .apiKey(apiKey)
                     .build();
@@ -172,10 +182,14 @@ public class SubcmdExerciseMtSeparateContexts extends GenericApiSubcmd {
                 } catch (IOException e) {
                     darnit("IOException during geocoding: " + e.getMessage());
                 }
-                out.print(".");
-                out.flush();
+                //out.print(".");
+                //out.flush();
                 // And do nothing with the results; we're just trying to make threaded workers do work.
-                Thread.sleep(options.delayBetweenQueries);
+                try {
+                    Thread.sleep(options.delayBetweenQueries);
+                } catch (InterruptedException e) {
+                    // quash
+                }
             }
         }
     }
