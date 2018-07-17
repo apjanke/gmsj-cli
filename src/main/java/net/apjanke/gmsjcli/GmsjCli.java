@@ -31,6 +31,8 @@ class GmsjCli {
             cmd = new SubcmdExerciseLinger();
         } else if ("exercise-mt-separate-contexts".equals(subcommand)) {
             cmd = new SubcmdExerciseMtSeparateContexts();
+        } else if ("placedetails".equals(subcommand)) {
+            cmd = new SubcmdPlaceDetails();
         } else {
             System.err.println("Error: Unrecognized subcommand: " + subcommand);
             System.err.println("Error: Valid subcommands are: " + Arrays.toString(validSubCmds));
