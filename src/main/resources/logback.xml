@@ -7,10 +7,10 @@
     </layout>
   </appender>
 
-  <logger name="com.google.maps" level="DEBUG" />
-  <logger name="net.apjanke.gmsjcli" level="DEBUG" />
+  <logger name="com.google.maps" level="INFO" />
+  <logger name="net.apjanke.gmsjcli" level="INFO" />
 
-  <root level="INFO">
+  <root level="WARN">
     <appender-ref ref="STDOUT" />
   </root>
 
