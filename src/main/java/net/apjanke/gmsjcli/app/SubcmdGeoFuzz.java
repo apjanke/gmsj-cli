@@ -26,7 +26,7 @@ import java.util.Random;
  *
  * Usage:
  * <pre>
- *     java net.apjanke.gmsjcli.app.MainApp geofuzz [-f|--format &lt;format>] [-r &lt;radius>] <address>
+ *     gmsj-cli geofuzz [-f|--format &lt;format>] [-r &lt;radius>] <address>
  *
  *     Arguments:
  *       * -f, --format &lt;format>
@@ -45,7 +45,7 @@ import java.util.Random;
  *
  * Examples:
  * <pre>
- *     java net.apjanke.gmsjcli.app.MainApp geofuzz -n 3000 -r 0.3 "World Trade Center"
+ *     gmsj-cli geofuzz -n 3000 -r 0.3 "World Trade Center"
  * </pre>
  *
  * This command is wrapped by the 'bin/gmsj-cli geofuzz' subcommand in the main driver script.

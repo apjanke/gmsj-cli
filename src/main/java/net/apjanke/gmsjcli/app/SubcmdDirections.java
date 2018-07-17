@@ -18,7 +18,7 @@ import java.util.List;
  *
  * Usage:
  * <pre>
- *     java net.apjanke.gmsjcli.app.MainApp directions [-t &lt;travel-mode>] [-T &lt;transit-mode>] [-a] [-M &lt;traffic-model>]
+ *     gmsj-cli directions [-t &lt;travel-mode>] [-T &lt;transit-mode>] [-a] [-M &lt;traffic-model>]
  * </pre>
  */
 public class SubcmdDirections extends GenericApiSubcmd {

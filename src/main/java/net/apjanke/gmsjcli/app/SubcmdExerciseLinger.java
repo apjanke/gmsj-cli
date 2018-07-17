@@ -23,7 +23,7 @@ import java.util.Random;
  *
  * Usage:
  * <pre>
- *     java net.apjanke.gmsjcli.app.MainApp exercise-linger [-n &lt;num-instances>] [-p &lt;points-per-instance] [-d|--dirty] [-W|--no-wait]
+ *     gmsj-cli exercise-linger [-n &lt;num-instances>] [-p &lt;points-per-instance] [-d|--dirty] [-W|--no-wait]
  *
  *     Arguments:
  *       * -n, --num-instances &lt;nInstances

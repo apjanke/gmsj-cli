@@ -22,7 +22,7 @@ import java.util.Random;
  *
  * Usage:
  * <pre>
- *     java net.apjanke.gmsjcli.app.MainApp exercise-mt-separate-contexts [-n &lt;num-instances>] [-p &lt;points-per-instance] [-D|--delayBetweenLaunch &lt;delayBetweenLaunch>] [-d|--dirty] [-W|--no-wait]
+ *     gmsj-cli exercise-mt-separate-contexts [-n &lt;num-instances>] [-p &lt;points-per-instance] [-D|--delayBetweenLaunch &lt;delayBetweenLaunch>] [-d|--dirty] [-W|--no-wait]
  *
  *     Arguments:
  *       * -n, --num-instances &lt;nInstances

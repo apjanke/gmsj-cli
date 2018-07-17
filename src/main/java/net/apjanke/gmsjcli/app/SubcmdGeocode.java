@@ -9,7 +9,7 @@ import org.apache.commons.cli.*;
  *
  * Usage:
  * <pre>
- *     java net.apjanke.gmsjcli.app.MainApp geocode [-f|--format &lt;format>] &lt;address>
+ *     gmsj-cli geocode [-f|--format &lt;format>] &lt;address>
  *
  *     Arguments:
  *       * -f, --format &lt;format>
