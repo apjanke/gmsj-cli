@@ -33,6 +33,8 @@ class GmsjCli {
             cmd = new SubcmdExerciseMtSeparateContexts();
         } else if ("placedetails".equals(subcommand)) {
             cmd = new SubcmdPlaceDetails();
+        } else if ("encoded-poly-path".equals(subcommand)) {
+            cmd = new SubcmdEncodedPolylineForPoints();
         } else {
             System.err.println("Error: Unrecognized subcommand: " + subcommand);
             System.err.println("Error: Valid subcommands are: " + Arrays.toString(validSubCmds));
