@@ -33,6 +33,8 @@ class GmsjCli {
             cmd = new SubcmdExerciseMtSeparateContexts();
         } else if ("placedetails".equals(subcommand)) {
             cmd = new SubcmdPlaceDetails();
+        } else if ("placetextsearch".equals(subcommand)) {
+            cmd = new SubcmdPlaceTextSearch();
         } else if ("encoded-poly-path".equals(subcommand)) {
             cmd = new SubcmdEncodedPolylineForPoints();
         } else {
